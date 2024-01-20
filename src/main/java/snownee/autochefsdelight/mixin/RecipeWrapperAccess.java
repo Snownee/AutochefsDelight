@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import com.nhoryzon.mc.farmersdelight.entity.block.inventory.ItemStackInventory;
 import com.nhoryzon.mc.farmersdelight.entity.block.inventory.RecipeWrapper;
 
-@Mixin(value = RecipeWrapper.class, remap = false)
+@Mixin(value = RecipeWrapper.class)
 public interface RecipeWrapperAccess {
-	@Accessor
+	@Accessor(remap = false)
 	ItemStackInventory getInventory();
 }

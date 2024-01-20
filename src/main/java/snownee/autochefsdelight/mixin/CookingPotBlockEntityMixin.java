@@ -30,19 +30,19 @@ import snownee.autochefsdelight.util.CommonProxy;
 import snownee.autochefsdelight.util.DummyRecipeContext;
 import snownee.autochefsdelight.util.RecipeMatcher;
 
-@Mixin(value = CookingPotBlockEntity.class, remap = false)
+@Mixin(CookingPotBlockEntity.class)
 public abstract class CookingPotBlockEntityMixin {
 
 	@Unique
 	@Nullable
 	private RecipeMatcher<ItemStack> lastRecipeMatch;
 
-	@Inject(method = "getMatchingRecipe", at = @At("HEAD"))
+	@Inject(method = "getMatchingRecipe", at = @At("HEAD"), remap = false)
 	private void getMatchingRecipe(RecipeWrapper inventory, CallbackInfoReturnable<Optional<CookingPotRecipe>> ci, @Local LocalRef<RecipeWrapper> inventoryRef) {
-		inventoryRef.set(new DummyRecipeContext(((RecipeWrapperAccess) inventory).getInventory(), $ -> lastRecipeMatch = $));
+		inventoryRef.set(new DummyRecipeContext(((RecipeWrapperAccess) inventory).getInventory(), this::setRecipeMatch));
 	}
 
-	@WrapOperation(method = "getMatchingRecipe", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
+	@WrapOperation(method = "getMatchingRecipe", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;", remap = true), remap = false)
 	private Optional<CookingPotRecipe> getMatchingRecipe(RecipeManager instance, RecipeType<CookingPotRecipe> recipeType, Container ctx, Level level, Operation<Optional<CookingPotRecipe>> original) {
 		for (CookingPotRecipe recipe : AutochefsDelight.COOKING_POT_RECIPES) {
 			if (recipe.matches(ctx, level)) {
@@ -52,10 +52,10 @@ public abstract class CookingPotBlockEntityMixin {
 		return Optional.empty();
 	}
 
-	@Inject(method = "processCooking", at = @At(value = "INVOKE", target = "Lcom/nhoryzon/mc/farmersdelight/entity/block/CookingPotBlockEntity;trackRecipeExperience(Lnet/minecraft/world/item/crafting/Recipe;)V", shift = At.Shift.AFTER), cancellable = true)
+	@Inject(method = "processCooking", at = @At(value = "INVOKE", target = "Lcom/nhoryzon/mc/farmersdelight/entity/block/CookingPotBlockEntity;trackRecipeExperience(Lnet/minecraft/world/item/crafting/Recipe;)V", shift = At.Shift.AFTER, remap = true), cancellable = true, remap = false)
 	private void processCooking(CookingPotRecipe recipe, CallbackInfoReturnable<Boolean> ci) {
 		CookingPotBlockEntity self = (CookingPotBlockEntity) (Object) this;
-		DummyRecipeContext ctx = new DummyRecipeContext(self, $ -> lastRecipeMatch = $);
+		DummyRecipeContext ctx = new DummyRecipeContext(self, this::setRecipeMatch);
 		Level level = self.getLevel();
 		if (lastRecipeMatch == null && level != null) {
 			recipe.matches(ctx, level);
@@ -86,5 +86,10 @@ public abstract class CookingPotBlockEntityMixin {
 		lastRecipeMatch = null;
 		self.onContentsChanged(0);
 		ci.setReturnValue(true);
+	}
+
+	@Unique
+	public void setRecipeMatch(@Nullable RecipeMatcher<ItemStack> match) {
+		lastRecipeMatch = match;
 	}
 }

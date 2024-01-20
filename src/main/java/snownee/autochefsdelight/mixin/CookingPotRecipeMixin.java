@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 import snownee.autochefsdelight.util.DummyRecipeContext;
 import snownee.autochefsdelight.util.RecipeMatcher;
 
-@Mixin(value = CookingPotRecipe.class, remap = false)
+@Mixin(CookingPotRecipe.class)
 public abstract class CookingPotRecipeMixin {
 
 	@Shadow

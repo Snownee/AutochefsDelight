@@ -11,7 +11,7 @@ import net.minecraft.server.ReloadableServerResources;
 import net.minecraft.world.item.crafting.RecipeManager;
 import snownee.autochefsdelight.AutochefsDelight;
 
-@Mixin(value = ReloadableServerResources.class, remap = false)
+@Mixin(ReloadableServerResources.class)
 public class ReloadableServerResourcesMixin {
 
 	@Shadow
