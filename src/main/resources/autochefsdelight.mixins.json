@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "snownee.autochefsdelight.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "autochefsdelight.refmap.json",
+  "mixins": [
+    "CookingPotBlockEntityMixin",
+    "CookingPotRecipeMixin",
+    "RecipeWrapperAccess",
+    "ReloadableServerResourcesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
