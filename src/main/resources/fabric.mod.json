@@ -2,33 +2,32 @@
   "schemaVersion": 1,
   "id": "autochefsdelight",
   "version": "${version}",
-
   "name": "Autochef's Delight",
   "description": "",
-  "authors": ["Snownee"],
+  "authors": [
+    "Snownee"
+  ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/autochefs-delight",
     "sources": "https://github.com/Snownee/AutochefsDelight",
     "issues": "https://github.com/Snownee/AutochefsDelight/issues"
   },
-
   "license": "ARR",
-
   "entrypoints": {
     "main": [
       "snownee.autochefsdelight.util.CommonProxy"
     ]
   },
-  "mixins": [ "autochefsdelight.mixins.json" ],
-  "accessWidener" : "autochefsdelight.accesswidener",
-
+  "mixins": [
+    "autochefsdelight.mixins.json"
+  ],
+  "accessWidener": "autochefsdelight.accesswidener",
   "depends": {
     "fabricloader": ">=0.15",
     "fabric-api": ">=0.73",
-    "minecraft": ">=1.20",
-	"farmersdelight": "*"
+    "minecraft": ">=1.20 <=1.20.1",
+    "farmersdelight": ">=1.4.3 <2"
   },
-
   "custom": {
     "modmenu": {
       "links": {
