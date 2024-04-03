@@ -1,9 +1,13 @@
 package snownee.autochefsdelight.mixin;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,14 +17,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.nhoryzon.mc.farmersdelight.block.CookingPotBlock;
-import com.nhoryzon.mc.farmersdelight.entity.block.CookingPotBlockEntity;
-import com.nhoryzon.mc.farmersdelight.entity.block.inventory.RecipeWrapper;
-import com.nhoryzon.mc.farmersdelight.recipe.CookingPotRecipe;
 
-import net.minecraft.core.Direction;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -29,62 +29,84 @@ import snownee.autochefsdelight.AutochefsDelight;
 import snownee.autochefsdelight.util.CommonProxy;
 import snownee.autochefsdelight.util.DummyRecipeContext;
 import snownee.autochefsdelight.util.RecipeMatcher;
+import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
+import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 
 @Mixin(CookingPotBlockEntity.class)
 public abstract class CookingPotBlockEntityMixin {
 
+	@Shadow
+	protected abstract void ejectIngredientRemainder(ItemStack remainderStack);
+
+	@Shadow
+	@Final
+	public static Map<Item, Item> INGREDIENT_REMAINDER_OVERRIDES;
 	@Unique
 	@Nullable
 	private RecipeMatcher<ItemStack> lastRecipeMatch;
 
 	@Inject(method = "getMatchingRecipe", at = @At("HEAD"), remap = false)
-	private void getMatchingRecipe(RecipeWrapper inventory, CallbackInfoReturnable<Optional<CookingPotRecipe>> ci, @Local LocalRef<RecipeWrapper> inventoryRef) {
-		inventoryRef.set(new DummyRecipeContext(((RecipeWrapperAccess) inventory).getInventory(), this::setRecipeMatch));
+	private void getMatchingRecipe(
+			RecipeWrapper inventory,
+			CallbackInfoReturnable<Optional<CookingPotRecipe>> ci,
+			@Local(argsOnly = true) LocalRef<RecipeWrapper> inventoryRef) {
+		inventoryRef.set(new DummyRecipeContext(((RecipeWrapperAccess) inventory).getHandler(), this::setRecipeMatch));
 	}
 
-	@WrapOperation(method = "getMatchingRecipe", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;", remap = true), remap = false)
-	private Optional<CookingPotRecipe> getMatchingRecipe(RecipeManager instance, RecipeType<CookingPotRecipe> recipeType, Container ctx, Level level, Operation<Optional<CookingPotRecipe>> original) {
+	@WrapOperation(
+			method = "getMatchingRecipe", at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;",
+			remap = true), remap = false)
+	private Optional<CookingPotRecipe> getMatchingRecipe(
+			RecipeManager instance,
+			RecipeType<CookingPotRecipe> recipeType,
+			Container ctx,
+			Level level,
+			Operation<Optional<CookingPotRecipe>> original,
+			@Local(argsOnly = true) RecipeWrapper recipeWrapper) {
 		for (CookingPotRecipe recipe : AutochefsDelight.COOKING_POT_RECIPES) {
-			if (recipe.matches(ctx, level)) {
+			if (recipe.matches(recipeWrapper, level)) {
 				return Optional.of(recipe);
 			}
 		}
 		return Optional.empty();
 	}
 
-	@Inject(method = "processCooking", at = @At(value = "INVOKE", target = "Lcom/nhoryzon/mc/farmersdelight/entity/block/CookingPotBlockEntity;trackRecipeExperience(Lnet/minecraft/world/item/crafting/Recipe;)V", shift = At.Shift.AFTER, remap = true), cancellable = true, remap = false)
-	private void processCooking(CookingPotRecipe recipe, CallbackInfoReturnable<Boolean> ci) {
-		CookingPotBlockEntity self = (CookingPotBlockEntity) (Object) this;
-		DummyRecipeContext ctx = new DummyRecipeContext(self, this::setRecipeMatch);
-		Level level = self.getLevel();
-		if (lastRecipeMatch == null && level != null) {
-			recipe.matches(ctx, level);
-		}
+	@Inject(
+			method = "processCooking", at = @At(
+			value = "INVOKE",
+			target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;setRecipeUsed(Lnet/minecraft/world/item/crafting/Recipe;)V",
+			shift = At.Shift.AFTER,
+			remap = true), cancellable = true, remap = false)
+	private void processCooking(CookingPotRecipe recipe, CookingPotBlockEntity self, CallbackInfoReturnable<Boolean> ci) {
+		Level level = Objects.requireNonNull(self.getLevel());
 		if (lastRecipeMatch == null) {
-			return;
+			recipe.matches(new DummyRecipeContext(self.getInventory(), this::setRecipeMatch), level);
+			if (lastRecipeMatch == null) {
+				return;
+			}
 		}
 		for (int i = 0; i < lastRecipeMatch.inputUsed.length; i++) {
 			ItemStack stack = lastRecipeMatch.inputs.get(i);
 			int used = lastRecipeMatch.inputUsed[i];
 			ItemStack remainder = CommonProxy.getRecipeRemainder(stack);
-			if (level != null && !remainder.isEmpty()) {
+			if (!remainder.isEmpty()) {
 				if (ItemStack.isSameItemSameTags(remainder, stack)) {
 					continue;
+				} else {
+					ejectIngredientRemainder(remainder);
 				}
-				Direction direction = self.getBlockState().getValue(CookingPotBlock.FACING).getCounterClockWise();
-				double dropX = (double) self.getBlockPos().getX() + 0.5 + (double) direction.getStepX() * 0.25;
-				double dropY = (double) self.getBlockPos().getY() + 0.7;
-				double dropZ = (double) self.getBlockPos().getZ() + 0.5 + (double) direction.getStepZ() * 0.25;
-				for (int j = 0; j < used; j++) {
-					ItemEntity entity = new ItemEntity(level, dropX, dropY, dropZ, remainder.copy());
-					entity.setDeltaMovement((float) direction.getStepX() * 0.08F, 0.25, (float) direction.getStepZ() * 0.08F);
-					level.addFreshEntity(entity);
+			} else {
+				Item remainderItem = INGREDIENT_REMAINDER_OVERRIDES.get(stack.getItem());
+				if (remainderItem != null) {
+					ejectIngredientRemainder(remainderItem.getDefaultInstance());
 				}
 			}
 			stack.shrink(used);
 		}
 		lastRecipeMatch = null;
-		self.onContentsChanged(0);
+		self.getInventory().setChanged();
 		ci.setReturnValue(true);
 	}
 
