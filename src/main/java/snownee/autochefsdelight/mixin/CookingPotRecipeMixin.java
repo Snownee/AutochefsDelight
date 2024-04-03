@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.common.collect.Lists;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -24,12 +24,12 @@ import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 @Mixin(CookingPotRecipe.class)
 public abstract class CookingPotRecipeMixin {
 
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private NonNullList<Ingredient> inputItems;
 
-	@Inject(method = "matches(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)
-	private void matches(Container inv, Level world, CallbackInfoReturnable<Boolean> ci) {
+	@Inject(method = "matches(Lio/github/fabricators_of_create/porting_lib/transfer/item/RecipeWrapper;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)
+	private void matches(RecipeWrapper inv, Level level, CallbackInfoReturnable<Boolean> ci) {
 		List<ItemStack> inputs;
 		int[] amount;
 		if (inv instanceof DummyRecipeContext ctx) {
