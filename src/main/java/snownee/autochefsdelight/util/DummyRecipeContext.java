@@ -5,9 +5,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 
 public class DummyRecipeContext extends RecipeWrapper {
@@ -16,9 +16,9 @@ public class DummyRecipeContext extends RecipeWrapper {
 	public final int[] amount;
 	public final Consumer<RecipeMatcher<ItemStack>> matchSetter;
 
-	public DummyRecipeContext(ItemStackHandler inventory, Consumer<RecipeMatcher<ItemStack>> matchSetter) {
+	public DummyRecipeContext(IItemHandlerModifiable inventory, Consumer<RecipeMatcher<ItemStack>> matchSetter) {
 		super(inventory);
-		filteredInputs = IntStream.range(0, inventory.getSlotCount())
+		filteredInputs = IntStream.range(0, inventory.getSlots())
 				.mapToObj(inventory::getStackInSlot)
 				.limit(CookingPotRecipe.INPUT_SLOTS)
 				.filter(Predicate.not(ItemStack::isEmpty))

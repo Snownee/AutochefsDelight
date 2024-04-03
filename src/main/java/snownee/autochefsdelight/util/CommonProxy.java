@@ -1,14 +1,12 @@
 package snownee.autochefsdelight.util;
 
-import net.fabricmc.api.ModInitializer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.common.Mod;
+import snownee.autochefsdelight.AutochefsDelight;
 
-public class CommonProxy implements ModInitializer {
-	@Override
-	public void onInitialize() {
-	}
-
+@Mod(AutochefsDelight.ID)
+public class CommonProxy {
 	public static ItemStack getRecipeRemainder(ItemStack stack) {
-		return stack.getRecipeRemainder();
+		return stack.getCraftingRemainingItem();
 	}
 }

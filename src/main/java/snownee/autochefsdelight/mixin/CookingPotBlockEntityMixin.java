@@ -18,13 +18,13 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import snownee.autochefsdelight.AutochefsDelight;
 import snownee.autochefsdelight.util.CommonProxy;
 import snownee.autochefsdelight.util.DummyRecipeContext;
@@ -49,7 +49,7 @@ public abstract class CookingPotBlockEntityMixin {
 			RecipeWrapper inventory,
 			CallbackInfoReturnable<Optional<CookingPotRecipe>> ci,
 			@Local(argsOnly = true) LocalRef<RecipeWrapper> inventoryRef) {
-		inventoryRef.set(new DummyRecipeContext(((RecipeWrapperAccess) inventory).getHandler(), this::setRecipeMatch));
+		inventoryRef.set(new DummyRecipeContext(((RecipeWrapperAccess) inventory).getInv(), this::setRecipeMatch));
 	}
 
 	@WrapOperation(
@@ -105,7 +105,6 @@ public abstract class CookingPotBlockEntityMixin {
 			stack.shrink(used);
 		}
 		lastRecipeMatch = null;
-		self.getInventory().setChanged();
 		ci.setReturnValue(true);
 	}
 

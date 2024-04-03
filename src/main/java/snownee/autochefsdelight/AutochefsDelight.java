@@ -30,6 +30,6 @@ public final class AutochefsDelight {
 	}
 
 	private static int countSimpleIngredients(Recipe<?> recipe) {
-		return (int) recipe.getIngredients().stream().filter($ -> !$.isEmpty() && !$.requiresTesting()).count();
+		return (int) recipe.getIngredients().stream().filter($ -> !$.isEmpty() && $.isSimple()).count();
 	}
 }

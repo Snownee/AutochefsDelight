@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[40,)"
+license = "ARR"
+
+[[mods]]
+modId = "autochefsdelight"
+version = "${file.jarVersion}"
+displayName = "Autochef's Delight"
+authors = "Snownee"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/autochefs-delight"
+description = ""
+
+[[dependencies.autochefsdelight]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20, 1.20.2)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.autochefsdelight]]
+modId = "farmersdelight"
+mandatory = true
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"
