@@ -23,15 +23,13 @@ public final class AutochefsDelight {
 		List<CookingPotRecipe> recipes = recipeManager.getAllRecipesFor(RecipeTypesRegistry.COOKING_RECIPE_SERIALIZER.type());
 		COOKING_POT_RECIPES = recipes.stream()
 				.filter(Predicate.not(Recipe::isIncomplete))
-				.sorted(Comparator
-						.comparingInt((CookingPotRecipe $) -> $.getIngredients().size())
-						.thenComparingInt(AutochefsDelight::countSimpleIngredients))
+				.sorted(Comparator.comparingInt((CookingPotRecipe $) -> $.getIngredients().size())
+						.thenComparingInt(AutochefsDelight::countSimpleIngredients)
+						.reversed())
 				.toList();
 	}
 
 	private static int countSimpleIngredients(Recipe<?> recipe) {
-		return (int) recipe.getIngredients().stream()
-				.filter($ -> !$.isEmpty() && !$.requiresTesting())
-				.count();
+		return (int) recipe.getIngredients().stream().filter($ -> !$.isEmpty() && !$.requiresTesting()).count();
 	}
 }
