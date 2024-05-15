@@ -281,7 +281,7 @@ unifiedPublishing {
                 id = "964282" // Required, must be a string, ID of CurseForge project
 
                 relations { // Optional, Inferred from the relations above by default
-                    depends "farmers-delight-refabricated"
+                    depends "farmers-delight"
                 }
             }
         }
@@ -292,7 +292,7 @@ unifiedPublishing {
                 id = "HY0PMpa3" // Required, must be a string, ID of Modrinth project
 
                 relations { // Optional, Inferred from the relations above by default
-                    depends "farmers-delight-refabricated"
+                    depends "farmers-delight"
                 }
             }
         }
