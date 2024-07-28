@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.google.common.collect.Lists;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import snownee.autochefsdelight.util.DummyRecipeContext;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
+import snownee.autochefsdelight.util.DummyRecipeInput;
 import snownee.autochefsdelight.util.RecipeMatcher;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 
@@ -28,11 +28,14 @@ public abstract class CookingPotRecipeMixin {
 	@Final
 	private NonNullList<Ingredient> inputItems;
 
-	@Inject(method = "matches(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)
-	private void matches(Container inv, Level level, CallbackInfoReturnable<Boolean> ci) {
+	@Inject(
+			method = "matches(Lnet/neoforged/neoforge/items/wrapper/RecipeWrapper;Lnet/minecraft/world/level/Level;)Z",
+			at = @At("HEAD"),
+			cancellable = true)
+	private void matches(RecipeWrapper inv, Level level, CallbackInfoReturnable<Boolean> ci) {
 		List<ItemStack> inputs;
 		int[] amount;
-		if (inv instanceof DummyRecipeContext ctx) {
+		if (inv instanceof DummyRecipeInput ctx) {
 			if (ctx.itemCount < inputItems.size()) {
 				ci.setReturnValue(false);
 				return;
@@ -59,7 +62,7 @@ public abstract class CookingPotRecipeMixin {
 			}
 		}
 		Optional<RecipeMatcher<ItemStack>> match = RecipeMatcher.findMatches(inputs, inputItems, amount);
-		if (inv instanceof DummyRecipeContext ctx) {
+		if (inv instanceof DummyRecipeInput ctx) {
 			ctx.matchSetter.accept(match.orElse(null));
 		}
 		ci.setReturnValue(match.isPresent());

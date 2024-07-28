@@ -1,7 +1,7 @@
 package snownee.autochefsdelight.util;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.Mod;
 import snownee.autochefsdelight.AutochefsDelight;
 
 @Mod(AutochefsDelight.ID)

@@ -7,7 +7,8 @@
     "CookingPotBlockEntityMixin",
     "CookingPotRecipeMixin",
     "RecipeWrapperAccess",
-    "ReloadableServerResourcesMixin"
+    "ReloadableServerResourcesMixin",
+    "SyncedBlockEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

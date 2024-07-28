@@ -19,7 +19,7 @@ public class ReloadableServerResourcesMixin {
 	private RecipeManager recipes;
 
 	// because tags are loaded after recipes, we bake cache here
-	@Inject(at = @At("TAIL"), method = "updateRegistryTags(Lnet/minecraft/core/RegistryAccess;)V")
+	@Inject(at = @At("TAIL"), method = "updateRegistryTags()V")
 	private void lychee_updateRegistryTags(CallbackInfo ci) {
 		AutochefsDelight.buildRecipeCache(recipes);
 	}
