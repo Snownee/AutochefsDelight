@@ -46,9 +46,9 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 	@Shadow(remap = false)
 	@Final
 	public static Map<Item, Item> INGREDIENT_REMAINDER_OVERRIDES;
-	@Shadow
+	@Shadow(remap = false)
 	private int cookTime;
-	@Shadow
+	@Shadow(remap = false)
 	private int cookTimeTotal;
 	@Unique
 	@Nullable

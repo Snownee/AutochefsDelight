@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import snownee.autochefsdelight.util.CookingPotDuck;
 import vectorwing.farmersdelight.common.block.entity.SyncedBlockEntity;
 
-@Mixin(SyncedBlockEntity.class)
+@Mixin(value = SyncedBlockEntity.class, remap = false)
 public class SyncedBlockEntityMixin {
 	@Inject(method = "inventoryChanged", at = @At("HEAD"))
 	private void inventoryChanged(CallbackInfo ci) {
