@@ -14,24 +14,20 @@
   },
   "license": "ARR",
   "entrypoints": {
-    "main": [
-      "snownee.autochefsdelight.util.CommonProxy"
-    ]
   },
   "mixins": [
     "autochefsdelight.mixins.json"
   ],
-  "accessWidener": "autochefsdelight.accesswidener",
   "depends": {
     "fabricloader": ">=0.15",
-    "fabric-api": ">=0.73",
-    "minecraft": ">=1.20 <=1.20.1",
-    "farmersdelight": ">=1.20.1-2"
+    "minecraft": ">=1.21 <=1.21.1",
+    "farmersdelight": ">=1.21-"
   },
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.discord": "https://discord.gg/KzGQW7a"
+        "modmenu.discord": "https://discord.gg/KzGQW7a",
+        "modmenu.donate": "https://ko-fi.com/snownee"
       }
     }
   }
