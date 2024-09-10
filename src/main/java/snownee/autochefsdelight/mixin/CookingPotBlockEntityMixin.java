@@ -114,7 +114,8 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 			method = "cookingTick",
 			at = @At(
 					value = "INVOKE",
-					target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;processCooking(Lnet/minecraft/world/item/crafting/RecipeHolder;Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;)Z"),
+					target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;processCooking(Lnet/minecraft/world/item/crafting/RecipeHolder;Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;)Z",
+					remap = true),
 			remap = false)
 	private static void setProcessingRecipe(
 			Level level,
