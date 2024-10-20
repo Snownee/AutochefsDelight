@@ -18,9 +18,8 @@ public class DummyRecipeContext extends RecipeWrapper {
 
 	public DummyRecipeContext(IItemHandlerModifiable inventory, Consumer<RecipeMatcher<ItemStack>> matchSetter) {
 		super(inventory);
-		filteredInputs = IntStream.range(0, inventory.getSlots())
+		filteredInputs = IntStream.range(0, CookingPotRecipe.INPUT_SLOTS)
 				.mapToObj(inventory::getStackInSlot)
-				.limit(CookingPotRecipe.INPUT_SLOTS)
 				.filter(Predicate.not(ItemStack::isEmpty))
 				.toList();
 		itemCount = filteredInputs.stream().mapToInt(ItemStack::getCount).sum();
