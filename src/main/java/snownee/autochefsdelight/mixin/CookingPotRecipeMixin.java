@@ -31,7 +31,8 @@ public abstract class CookingPotRecipeMixin {
 	@Inject(
 			method = "matches(Lnet/minecraftforge/items/wrapper/RecipeWrapper;Lnet/minecraft/world/level/Level;)Z",
 			at = @At("HEAD"),
-			cancellable = true)
+			cancellable = true,
+			remap = false)
 	private void matches(RecipeWrapper inv, Level level, CallbackInfoReturnable<Boolean> ci) {
 		List<ItemStack> inputs;
 		int[] amount;
