@@ -145,8 +145,11 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 			}
 		}
 		for (int i = 0; i < autochef$lastRecipeMatch.inputUsed.length; i++) {
-			ItemStack stack = autochef$lastRecipeMatch.inputs.get(i);
 			int used = autochef$lastRecipeMatch.inputUsed[i];
+			if (used == 0) {
+				continue;
+			}
+			ItemStack stack = autochef$lastRecipeMatch.inputs.get(i);
 			ItemStack remainder = CommonProxy.getRecipeRemainder(stack);
 			if (!remainder.isEmpty()) {
 				if (ItemStack.isSameItemSameComponents(remainder, stack)) {
