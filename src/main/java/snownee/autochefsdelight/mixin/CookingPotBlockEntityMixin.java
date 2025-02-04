@@ -111,12 +111,10 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 	@Inject(
-			method = "cookingTick",
-			at = @At(
-					value = "INVOKE",
-					target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;processCooking(Lnet/minecraft/world/item/crafting/RecipeHolder;Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;)Z",
-					remap = true),
-			remap = false)
+			method = "cookingTick", at = @At(
+			value = "INVOKE",
+			target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;processCooking(Lnet/minecraft/world/item/crafting/RecipeHolder;Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;)Z",
+			remap = true), remap = false)
 	private static void setProcessingRecipe(
 			Level level,
 			BlockPos pos,
@@ -135,8 +133,7 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 			target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;setRecipeUsed(Lnet/minecraft/world/item/crafting/RecipeHolder;)V",
 			shift = At.Shift.AFTER,
 			remap = true), cancellable = true, remap = false)
-	private void processCooking(
-			RecipeHolder<CookingPotRecipe> recipe, CookingPotBlockEntity self, CallbackInfoReturnable<Boolean> ci) {
+	private void processCooking(RecipeHolder<CookingPotRecipe> recipe, CookingPotBlockEntity self, CallbackInfoReturnable<Boolean> ci) {
 		Level level = Objects.requireNonNull(self.getLevel());
 		if (autochef$lastRecipeMatch == null) {
 			recipe.value().matches(new DummyRecipeInput(self.getInventory(), this::autochef$setRecipeMatch), level);
