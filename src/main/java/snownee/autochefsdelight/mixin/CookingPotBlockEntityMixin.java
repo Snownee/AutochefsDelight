@@ -87,8 +87,11 @@ public abstract class CookingPotBlockEntityMixin {
 			}
 		}
 		for (int i = 0; i < lastRecipeMatch.inputUsed.length; i++) {
-			ItemStack stack = lastRecipeMatch.inputs.get(i);
 			int used = lastRecipeMatch.inputUsed[i];
+			if (used == 0) {
+				continue;
+			}
+			ItemStack stack = lastRecipeMatch.inputs.get(i);
 			ItemStack remainder = CommonProxy.getRecipeRemainder(stack);
 			if (!remainder.isEmpty()) {
 				if (ItemStack.isSameItemSameTags(remainder, stack)) {
