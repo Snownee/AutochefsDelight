@@ -28,7 +28,10 @@ public abstract class CookingPotRecipeMixin {
 	@Final
 	private NonNullList<Ingredient> inputItems;
 
-	@Inject(method = "matches(Lio/github/fabricators_of_create/porting_lib/transfer/item/RecipeWrapper;Lnet/minecraft/world/level/Level;)Z", at = @At("HEAD"), cancellable = true)
+	@Inject(
+			method = "matches(Lio/github/fabricators_of_create/porting_lib/transfer/item/RecipeWrapper;Lnet/minecraft/world/level/Level;)Z",
+			at = @At("HEAD"),
+			cancellable = true)
 	private void matches(RecipeWrapper inv, Level level, CallbackInfoReturnable<Boolean> ci) {
 		List<ItemStack> inputs;
 		int[] amount;

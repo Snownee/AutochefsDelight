@@ -37,6 +37,7 @@ public abstract class CookingPotBlockEntityMixin {
 
 	@Shadow(remap = false)
 	protected abstract void ejectIngredientRemainder(ItemStack remainderStack);
+
 	@Shadow(remap = false)
 	@Final
 	public static Map<Item, Item> INGREDIENT_REMAINDER_OVERRIDES;
