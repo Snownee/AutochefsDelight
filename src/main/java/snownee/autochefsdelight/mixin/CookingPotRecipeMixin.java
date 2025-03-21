@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import snownee.autochefsdelight.util.DummyRecipeInput;
 import snownee.autochefsdelight.util.RecipeMatcher;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
-import vectorwing.farmersdelight.common.crafting.RecipeWrapper;
+import vectorwing.farmersdelight.refabricated.inventory.RecipeWrapper;
 
 @Mixin(CookingPotRecipe.class)
 public abstract class CookingPotRecipeMixin {
@@ -29,7 +29,7 @@ public abstract class CookingPotRecipeMixin {
 	private NonNullList<Ingredient> inputItems;
 
 	@Inject(
-			method = "matches(Lvectorwing/farmersdelight/common/crafting/RecipeWrapper;Lnet/minecraft/world/level/Level;)Z",
+			method = "matches(Lvectorwing/farmersdelight/refabricated/inventory/RecipeWrapper;Lnet/minecraft/world/level/Level;)Z",
 			at = @At("HEAD"),
 			cancellable = true)
 	private void matches(RecipeWrapper inv, Level level, CallbackInfoReturnable<Boolean> ci) {

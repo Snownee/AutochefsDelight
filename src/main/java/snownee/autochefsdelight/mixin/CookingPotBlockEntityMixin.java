@@ -35,7 +35,8 @@ import snownee.autochefsdelight.util.DummyRecipeInput;
 import snownee.autochefsdelight.util.RecipeMatcher;
 import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
-import vectorwing.farmersdelight.common.crafting.RecipeWrapper;
+import vectorwing.farmersdelight.refabricated.inventory.ItemStackHandler;
+import vectorwing.farmersdelight.refabricated.inventory.RecipeWrapper;
 
 @Mixin(CookingPotBlockEntity.class)
 public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
@@ -50,6 +51,9 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 	private int cookTime;
 	@Shadow(remap = false)
 	private int cookTimeTotal;
+	@Shadow(remap = false)
+	@Final
+	private ItemStackHandler inventory;
 	@Unique
 	@Nullable
 	private RecipeMatcher<ItemStack> autochef$lastRecipeMatch;
@@ -70,7 +74,7 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 			Level level,
 			Operation<Optional<RecipeHolder<CookingPotRecipe>>> original) {
 //		AutochefsDelight.LOGGER.info("getMatchingRecipe");
-		recipeWrapper = new DummyRecipeInput(((RecipeWrapper) recipeWrapper).getHandler(), this::autochef$setRecipeMatch);
+		recipeWrapper = new DummyRecipeInput(((RecipeWrapperAccess) recipeWrapper).getHandler(), this::autochef$setRecipeMatch);
 		for (RecipeHolder<CookingPotRecipe> recipe : AutochefsDelight.COOKING_POT_RECIPES) {
 			if (recipe.value().matches((RecipeWrapper) recipeWrapper, level)) {
 				return Optional.of(recipe);
@@ -93,7 +97,7 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 			method = "cookingTick",
 			at = @At(
 					value = "INVOKE",
-					target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;getMatchingRecipe(Lvectorwing/farmersdelight/common/crafting/RecipeWrapper;)Ljava/util/Optional;"),
+					target = "Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;getMatchingRecipe(Lvectorwing/farmersdelight/refabricated/inventory/RecipeWrapper;)Ljava/util/Optional;"),
 			remap = false)
 	private static Optional<RecipeHolder<CookingPotRecipe>> getProcessingRecipe(
 			@NotNull CookingPotBlockEntity cookingPot,
@@ -163,6 +167,7 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 			stack.shrink(used);
 		}
 		autochef$lastRecipeMatch = null;
+		inventory.commitModifiedStacks();
 		ci.setReturnValue(true);
 	}
 

@@ -1,11 +1,11 @@
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
+    id 'fabric-loom' version '1.10-SNAPSHOT'
     id 'maven-publish'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
 
 archivesBaseName = project.archives_base_name
 version = project.minecraft_version + "-Fabric-" + project.mod_version
@@ -94,9 +94,8 @@ dependencies {
 //    modCompileOnlyApi("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}")
 //    modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}")
 
-    modImplementation "curse.maven:kiwi-549404:5456615"
-    annotationProcessor "curse.maven:kiwi-549404:5456615"
-    modImplementation "curse.maven:jade-324717:5681277"
+    modImplementation "maven.modrinth:kiwi:15.1.5+fabric"
+    modImplementation "maven.modrinth:jade:15.10.0+fabric"
     modImplementation("vectorwing:FarmersDelight:${fdrf_version}") {
         exclude(group: "net.fabricmc")
     }
@@ -140,8 +139,7 @@ tasks.withType(JavaCompile).configureEach {
     // If Javadoc is generated, this must be specified in that task too.
     it.options.encoding = "UTF-8"
 
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release = 17
+    it.options.release = 21
 }
 
 java {
