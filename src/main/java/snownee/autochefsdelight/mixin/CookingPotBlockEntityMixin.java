@@ -165,9 +165,11 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 				}
 			}
 			stack.shrink(used);
+			if (CommonProxy.needInputIndexes()) {
+				self.getInventory().setStackInSlot(autochef$lastRecipeMatch.inputIndexes[i], stack);
+			}
 		}
 		autochef$lastRecipeMatch = null;
-		inventory.commitModifiedStacks();
 		ci.setReturnValue(true);
 	}
 

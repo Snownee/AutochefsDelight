@@ -6,4 +6,8 @@ public class CommonProxy {
 	public static ItemStack getRecipeRemainder(ItemStack stack) {
 		return stack.getRecipeRemainder();
 	}
+
+	public static boolean needInputIndexes() {
+		return true;
+	}
 }

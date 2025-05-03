@@ -12,6 +12,7 @@ import vectorwing.farmersdelight.refabricated.inventory.RecipeWrapper;
 
 public class DummyRecipeInput extends RecipeWrapper {
 	public final List<ItemStack> filteredInputs;
+	public final int[] inputIndexes;
 	public final int itemCount;
 	public final int[] amount;
 	public final Consumer<RecipeMatcher<ItemStack>> matchSetter;
@@ -22,8 +23,17 @@ public class DummyRecipeInput extends RecipeWrapper {
 				.mapToObj(inventory::getStackInSlot)
 				.filter(Predicate.not(ItemStack::isEmpty))
 				.toList();
+		inputIndexes = CommonProxy.needInputIndexes() ? new int[filteredInputs.size()] : null;
 		itemCount = filteredInputs.stream().mapToInt(ItemStack::getCount).sum();
 		amount = filteredInputs.stream().mapToInt(ItemStack::getCount).toArray();
 		this.matchSetter = matchSetter;
+		if (inputIndexes != null) {
+			int index = 0;
+			for (int slot = 0; slot < CookingPotRecipe.INPUT_SLOTS; slot++) {
+				if (!inventory.getStackInSlot(slot).isEmpty()) {
+					inputIndexes[index++] = slot;
+				}
+			}
+		}
 	}
 }

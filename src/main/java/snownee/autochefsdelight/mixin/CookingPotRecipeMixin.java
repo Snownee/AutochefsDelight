@@ -16,6 +16,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import snownee.autochefsdelight.util.CommonProxy;
 import snownee.autochefsdelight.util.DummyRecipeInput;
 import snownee.autochefsdelight.util.RecipeMatcher;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
@@ -63,6 +64,9 @@ public abstract class CookingPotRecipeMixin {
 		}
 		Optional<RecipeMatcher<ItemStack>> match = RecipeMatcher.findMatches(inputs, inputItems, amount);
 		if (inv instanceof DummyRecipeInput ctx) {
+			if (CommonProxy.needInputIndexes()) {
+				match.ifPresent(it -> it.inputIndexes = ctx.inputIndexes);
+			}
 			ctx.matchSetter.accept(match.orElse(null));
 		}
 		ci.setReturnValue(match.isPresent());

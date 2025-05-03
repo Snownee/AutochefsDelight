@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 public class RecipeMatcher<T> {
 
 	public List<T> inputs;
+	public int[] inputIndexes;
 	public List<? extends Predicate<T>> tests;
 	public int[] inputCapacity;
 	public int[] inputUsed;
