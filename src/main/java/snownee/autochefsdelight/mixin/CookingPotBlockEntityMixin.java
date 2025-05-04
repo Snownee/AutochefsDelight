@@ -19,6 +19,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +42,10 @@ public abstract class CookingPotBlockEntityMixin {
 	@Shadow(remap = false)
 	@Final
 	public static Map<Item, Item> INGREDIENT_REMAINDER_OVERRIDES;
+	@Shadow(remap = false)
+	private boolean checkNewRecipe;
+	@Shadow(remap = false)
+	private ResourceLocation lastRecipeID;
 	@Unique
 	@Nullable
 	private RecipeMatcher<ItemStack> lastRecipeMatch;
@@ -50,6 +55,9 @@ public abstract class CookingPotBlockEntityMixin {
 			RecipeWrapper inventory,
 			CallbackInfoReturnable<Optional<CookingPotRecipe>> ci,
 			@Local(argsOnly = true) LocalRef<RecipeWrapper> inventoryRef) {
+		if (checkNewRecipe) {
+			lastRecipeID = null;
+		}
 		inventoryRef.set(new DummyRecipeContext(((RecipeWrapperAccess) inventory).getHandler(), this::setRecipeMatch));
 	}
 
