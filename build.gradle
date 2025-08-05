@@ -96,7 +96,7 @@ dependencies {
 
     modImplementation "maven.modrinth:kiwi:15.1.5+fabric"
     modImplementation "maven.modrinth:jade:15.10.0+fabric"
-    modImplementation "maven.modrinth:farmers-delight-refabricated:1.21.1-3.0.3"
+    modImplementation "maven.modrinth:farmers-delight-refabricated:1.21.1-3.1.0"
     modImplementation("com.github.Chocohead:Fabric-ASM:${fabric_asm_version}") {
         exclude (group: "net.fabricmc.fabric-api")
     }
