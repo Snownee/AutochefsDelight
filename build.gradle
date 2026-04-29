@@ -1,13 +1,9 @@
 plugins {
-    id 'fabric-loom' version '1.10-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom-remap' version '1.16-SNAPSHOT'
     id 'maven-publish'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
-
-archivesBaseName = project.archives_base_name
 version = project.minecraft_version + "-Fabric-" + project.mod_version
 group = project.maven_group
 var realVersion = project.mod_version + '+fabric'
@@ -108,9 +104,6 @@ dependencies {
 }
 
 loom {
-    mixin {
-        defaultRefmapName = "${project.mod_id}.refmap.json"
-    }
 
 //    accessWidenerPath = file("src/main/resources/${project.mod_id}.accesswidener")
 
@@ -151,6 +144,8 @@ java {
     // if it is present.
     // If you remove this line, sources will not be generated.
     // withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
