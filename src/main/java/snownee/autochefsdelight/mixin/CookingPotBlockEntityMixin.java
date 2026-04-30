@@ -125,7 +125,7 @@ public abstract class CookingPotBlockEntityMixin implements CookingPotDuck {
 			BlockState state,
 			@NotNull CookingPotBlockEntity cookingPot,
 			CallbackInfo ci,
-			@Local Optional<RecipeHolder<CookingPotRecipe>> recipe) {
+			@Local(name = "recipe") Optional<RecipeHolder<CookingPotRecipe>> recipe) {
 		CookingPotBlockEntityMixin pot = (CookingPotBlockEntityMixin) (Object) cookingPot;
 		pot.autochef$processingRecipeID = recipe.orElseThrow().id();
 		pot.autochef$updateRecipe = false;
